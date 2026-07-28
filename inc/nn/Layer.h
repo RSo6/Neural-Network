@@ -1,12 +1,38 @@
 #ifndef LAYER_H
 #define LAYER_H
-#include "Matrix.h"
 #include <vector>
 
 using Vector = std::vector<double>;
 
 class Layer {
-    
+    class Matrix {
+        size_t _row {}, _col {}; // neuron & its weights
+        std::vector<Vector> _data {};
+        /*           w11 w12 ..  w1x128
+         * neuron1  |x1  x2  ..  x128  | out_neuron1
+         *           w21  w22 ..  w2x128
+         * neuron2  |x2
+         *          |..
+         * neuron1000|x1000
+         */
+        void xavierNormal();
+
+    public:
+        Matrix();
+
+        /**
+         * @brief Constructs matrix of weights
+         * @param in_layer Number of input layer neurons
+         * @param out_layer Number of output layer neurons
+         */
+        Matrix(const size_t in_layer, const size_t out_layer) ;
+        size_t rows() const;
+        size_t cols() const;
+        void updateWeight(int row, int col, double gradient);
+        Vector column(int neuron) const; // 1000 x 1
+        Vector row(int neuron) const; // 1 x 128
+        // Matrix & operator=(const Matrix & weights);
+    };
     Vector _activations {};
     Vector _biases {};
     Matrix _weights {};
